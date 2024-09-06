@@ -1,26 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
-*{  
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
-body{
+
+body {
     background: url("images/1.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    overflow: hidden;
 }
-.wrapper{
+
+.wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 110vh;
+    flex-direction: column;
+    min-height: 100vh;
     background: #212529;
 }
-.nav{
+
+.nav {
     position: fixed;
     top: 0;
     display: flex;
@@ -29,29 +30,36 @@ body{
     height: 100px;
     line-height: 100px;
     z-index: 100;
+    background: rgba(33, 37, 41, 0.9);
 }
-.nav-logo p{
+
+.nav-logo p {
     color: white;
     font-size: 25px;
     font-weight: 600;
 }
-.nav-menu ul{
+
+.nav-menu ul {
     display: flex;
 }
-.nav-menu ul li{
+
+.nav-menu ul li {
     list-style-type: none;
 }
-.nav-menu ul li .link{
+
+.nav-menu ul li .link {
     text-decoration: none;
     font-weight: 500;
     color: #fff;
     padding-bottom: 15px;
     margin: 0 25px;
 }
-.link:hover, .active{
+
+.link:hover, .active {
     border-bottom: 2px solid #fff;
 }
-.nav-button .btn{
+
+.nav-button .btn {
     width: 130px;
     height: 40px;
     font-weight: 500;
@@ -62,9 +70,68 @@ body{
     transition: .3s ease;
 }
 
-header{
+header {
     color: #fff;
     font-size: 30px;
     text-align: center;
     padding: 10px 0 30px 0;
+}
+
+#carouselExample {
+    margin-top: 100px;
+}
+
+.carousel, .carousel-inner, .carousel-item, .carousel-item img {
+    height: 75vh;
+    width: 98.5vw;
+}
+
+.carousel-item img {
+    object-fit: cover;
+}
+
+.category-section, .featured-products {
+    padding: 60px 20px;
+    color: #fff;
+}
+
+.category-section h2, .featured-products h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.category-card, .product-card {
+    background: #343a40;
+    border-radius: 8px;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    color: #fff;
+}
+
+.category-card img, .product-card img {
+    width: 100%;
+    height: auto;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-info h5 {
+    margin: 10px 0;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+footer {
+    background: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto; /* Faz com que o rodapé fique na parte inferior da página */
 }
