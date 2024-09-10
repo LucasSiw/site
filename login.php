@@ -1,6 +1,6 @@
 <?php
     // Inclua o arquivo de conexão
-    include_once(__DIR__ . '/conexao.php'); // Ajuste o caminho se necessário
+    include_once(__DIR__ . '\php\conexao.php'); // Ajuste o caminho se necessário
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['register'])) {
