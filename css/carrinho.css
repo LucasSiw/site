@@ -229,3 +229,24 @@ table tbody tr td {
     margin: 100px 0 50px;
     color: #fff;
 }
+
+.resumo .info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.resumo .info div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 5px; 
+}
+
+.resumo footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
