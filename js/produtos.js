@@ -46,3 +46,23 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("product-name").textContent = "Produto não encontrado.";
     }
 });
+
+function adicionarAoCarrinho() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    const produto = {
+        id: productId,
+        nome: document.getElementById("product-name").textContent,
+        preco: document.getElementById("product-price").textContent,
+        imagem: document.getElementById("product-image").src
+    };
+
+    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    carrinho.push(produto);
+
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+    alert("Produto adicionado ao carrinho!");
+}
+
