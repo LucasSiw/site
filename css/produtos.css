@@ -85,7 +85,6 @@ footer {
     margin-top: auto;
 }
 
-
 .product-details {
     display: flex;
     align-items: center;
@@ -94,6 +93,17 @@ footer {
     padding: 20px;
 }
 
+.product-details .btn {
+    width: 450px;
+    height: 40px;
+    font-weight: 500;
+    background: #ffb742;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+    color: black;
+}
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -104,12 +114,14 @@ footer {
 .col-md-6 {
     flex: 0 0 48%;
     max-width: 48%;
+    color: #fff;
 }
 
 .price {
     margin: 20px 0;
     font-size: 24px;
     font-weight: bold;
+    color: #fff;
 }
 
 .img-fluid {
