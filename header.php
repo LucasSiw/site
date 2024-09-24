@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +11,7 @@
     <link rel="shortcut icon" href="/apetrecho/img/Apetrecho.ico" type="image/x-icon">
     <title>Apetrecho</title>
 </head>
+
 <body>
     <div class="wrapper">
         <nav class="nav">
@@ -21,12 +23,12 @@
                     <li><a href="telahome.php" class="link active">Ínicial</a></li>
                     <li><a href="carrinho.php" class="link">Carrinho</a></li>
                     <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="#" class="link">Cadastrar</a></li>
+                    <li><a href="cadastrarproduto.php" class="link">Cadastrar</a></li>
                 </ul>
             </div>
             <div class="nav-button">
                 <?php if (isset($_SESSION['usuario_nome'])): ?>
-                    <span class="welcome-message">Bem-vindo, <?=htmlspecialchars($_SESSION['usuario_nome']); ?>!</span>
+                    <span class="welcome-message">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']); ?>!</span>
                 <?php else: ?>
                     <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
                 <?php endif; ?>

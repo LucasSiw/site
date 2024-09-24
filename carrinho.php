@@ -20,7 +20,7 @@
                     <li><a href="telahome.php" class="link active">Ínicial</a></li>
                     <li><a href="carrinho.php" class="link">Carrinho</a></li>
                     <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="#" class="link">Contato</a></li>
+                    <li><a href="cadastrarproduto.php" class="link">Cadastrar</a></li>
                 </ul>
             </div>
             <div class="nav-button">
