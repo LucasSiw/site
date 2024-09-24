@@ -1,59 +1,70 @@
 <?php
-// Inclua o arquivo de conexão
-include_once(__DIR__ . '/php/conexao.php'); // Use '/' em vez de '\' para caminhos em PHP
+include_once(__DIR__ . '/php/conexao.php');
+session_start();
+
+$errorMessage = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['register'])) {
-        $wNome     = htmlspecialchars($_POST['edNome']);
-        $wLogin    = htmlspecialchars($_POST['edEmail']);
-        $wSenha    = password_hash($_POST['edSenha'], PASSWORD_BCRYPT);
-        $wTelefone = htmlspecialchars($_POST['edTelefone']);
-        $wCPF      = htmlspecialchars($_POST['edCPF']);
-
-        // Use consultas preparadas para evitar SQL Injection
-        $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha) VALUES (?, ?, ?, ?, ?)");
-        if ($stmt) {
-            $stmt->bind_param('sssss', $wNome, $wTelefone, $wCPF, $wLogin, $wSenha);
-            if ($stmt->execute()) {
-                echo '<p style="color: white;">Novo registro criado com sucesso</p>';
-            } else {
-                echo '<p style="color: red;">Erro: ' . $stmt->error . '</p>';
-            }
-            $stmt->close();
-        } else {
-            echo '<p style="color: red;">Erro na preparação da consulta</p>';
-        }
-    } elseif (isset($_POST['login'])) {
+    if (isset($_POST['login'])) {
         $wLogin = htmlspecialchars($_POST['loginEmail']);
         $wSenha = $_POST['loginSenha'];
 
-        // Use consultas preparadas para evitar SQL Injection
-        $stmt = $wConexao->prepare("SELECT bdAluSenha FROM tbUsuario WHERE bdAluEmail = ?");
+        $stmt = $wConexao->prepare("SELECT bdAluNome, bdAluSenha FROM tbUsuario WHERE bdAluEmail = ?");
         if ($stmt) {
             $stmt->bind_param('s', $wLogin);
             $stmt->execute();
             $stmt->store_result();
+
             if ($stmt->num_rows > 0) {
-                $stmt->bind_result($hashedPassword);
+                $stmt->bind_result($wNome, $hashedPassword);
                 $stmt->fetch();
+
                 if (password_verify($wSenha, $hashedPassword)) {
-                    // Se o login for bem-sucedido, redirecione para a página inicial
-                    header("Location: telahome.html"); // Altere para o caminho da sua página inicial
+                    $_SESSION['usuario_nome'] = $wNome;
+                    header("Location: telahome.php");
                     exit();
                 } else {
-                    echo '<p style="color: red;">Senha incorreta</p>';
+                    $errorMessage = 'Senha incorreta';
                 }
             } else {
-                echo '<p style="color: red;">Email não encontrado</p>';
+                $errorMessage = 'Email não encontrado';
             }
             $stmt->close();
         } else {
-            echo '<p style="color: red;">Erro na preparação da consulta</p>';
+            $errorMessage = 'Erro na preparação da consulta';
+        }
+    }
+
+    // Registro
+    if (isset($_POST['edNome'])) {
+        $nome = htmlspecialchars($_POST['edNome']);
+        $telefone = htmlspecialchars($_POST['edTelefone']);
+        $cpf = htmlspecialchars($_POST['edCPF']);
+        $email = htmlspecialchars($_POST['edEmail']);
+        $senha = $_POST['edSenha'];
+        $senhaRep = $_POST['edSenhaRep'];
+
+        if ($senha !== $senhaRep) {
+            $errorMessage = 'As senhas não coincidem';
+        } else {
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+            $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha) VALUES (?, ?, ?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param('sssss', $nome, $telefone, $cpf, $email, $senhaHash);
+                if ($stmt->execute()) {
+                    header("Location: telahome.php");
+                    exit;
+                } else {
+                    $errorMessage = 'Erro ao registrar o usuário';
+                }
+                $stmt->close();
+            } else {
+                $errorMessage = 'Erro na preparação da consulta de inserção';
+            }
         }
     }
 }
-
-$wConexao->close();
 ?>
 
 <!DOCTYPE html>
@@ -138,6 +149,11 @@ $wConexao->close();
     </div>
 
     <script src="/apetrecho/js/login.js"></script>
+    <?php if (!empty($errorMessage)): ?>
+    <script>
+        alert("<?php echo htmlspecialchars($errorMessage); ?>");
+    </script>
+    <?php endif; ?>
 </body>
 
 </html>

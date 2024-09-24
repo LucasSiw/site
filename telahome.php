@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+$userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -24,7 +29,11 @@
                 </ul>
             </div>
             <div class="nav-button">
-                <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                <?php if ($userName): ?>
+                    <span>Bem-vindo, <?= htmlspecialchars($userName); ?>!</span>
+                <?php else: ?>
+                    <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                <?php endif; ?>
             </div>
         </nav>
 
