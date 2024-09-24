@@ -12,6 +12,7 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/apetrecho/css/telahome.css">
+    <link rel="shortcut icon" href="/apetrecho/img/Apetrecho.ico" type="image/x-icon">
     <title>Apetrecho</title>
 </head>
 <body>
@@ -25,7 +26,7 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
                     <li><a href="#" class="link active">Ínicial</a></li>
                     <li><a href="carrinho.html" class="link">Carrinho</a></li>
                     <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="#" class="link">Contato</a></li>
+                    <li><a href="#" class="link">Cadastrar</a></li>
                 </ul>
             </div>
             <div class="nav-button">
