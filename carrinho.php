@@ -17,8 +17,8 @@
             </div>
             <div class="nav-menu" id="navMenu">
                 <ul>
-                    <li><a href="telahome.html" class="link active">Ínicial</a></li>
-                    <li><a href="carrinho.html" class="link">Carrinho</a></li>
+                    <li><a href="telahome.php" class="link active">Ínicial</a></li>
+                    <li><a href="carrinho.php" class="link">Carrinho</a></li>
                     <li><a href="#" class="link">Serviços</a></li>
                     <li><a href="#" class="link">Contato</a></li>
                 </ul>

@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $wLogin = htmlspecialchars($_POST['loginEmail']);
         $wSenha = $_POST['loginSenha'];
 
+        // Verifica se o email existe no banco de dados
         $stmt = $wConexao->prepare("SELECT bdAluNome, bdAluSenha FROM tbUsuario WHERE bdAluEmail = ?");
         if ($stmt) {
             $stmt->bind_param('s', $wLogin);
@@ -19,9 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bind_result($wNome, $hashedPassword);
                 $stmt->fetch();
 
+                // Verifica se a senha é válida
                 if (password_verify($wSenha, $hashedPassword)) {
-                    $_SESSION['usuario_nome'] = $wNome;
-                    header("Location: telahome.php");
+                    $_SESSION['usuario_nome'] = $wNome; // Salva o nome do usuário na sessão
+                    $_SESSION['bdAluEmail'] = $wLogin; // Salva o email também, caso precise depois
+                    header("Location: telahome.php"); // Redireciona após login bem-sucedido
                     exit();
                 } else {
                     $errorMessage = 'Senha incorreta';
@@ -47,13 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($senha !== $senhaRep) {
             $errorMessage = 'As senhas não coincidem';
         } else {
-            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT); // Cria o hash da senha
 
+            // Prepara para inserir o novo usuário no banco
             $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha) VALUES (?, ?, ?, ?, ?)");
             if ($stmt) {
                 $stmt->bind_param('sssss', $nome, $telefone, $cpf, $email, $senhaHash);
                 if ($stmt->execute()) {
-                    header("Location: telahome.php");
+                    $_SESSION['usuario_nome'] = $nome; // Salva o nome na sessão após o registro
+                    header("Location: telahome.php"); // Redireciona após registro bem-sucedido
                     exit;
                 } else {
                     $errorMessage = 'Erro ao registrar o usuário';
@@ -66,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">

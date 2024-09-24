@@ -1,10 +1,18 @@
 <?php
+include_once('header.php'); 
 session_start();
 
-$userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
+if (!isset($_SESSION['usuario_nome'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$userName = $_SESSION['usuario_nome'];
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,29 +23,8 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
     <link rel="shortcut icon" href="/apetrecho/img/Apetrecho.ico" type="image/x-icon">
     <title>Apetrecho</title>
 </head>
-<body>
-    <div class="wrapper">
-        <nav class="nav">
-            <div class="nav-logo">
-                <p>Apetrecho</p>
-            </div>
-            <div class="nav-menu" id="navMenu">
-                <ul>
-                    <li><a href="#" class="link active">Ínicial</a></li>
-                    <li><a href="carrinho.html" class="link">Carrinho</a></li>
-                    <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="#" class="link">Cadastrar</a></li>
-                </ul>
-            </div>
-            <div class="nav-button">
-                <?php if ($userName): ?>
-                    <span>Bem-vindo, <?= htmlspecialchars($userName); ?>!</span>
-                <?php else: ?>
-                    <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
-                <?php endif; ?>
-            </div>
-        </nav>
 
+<body>
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -101,13 +88,11 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : null;
                 </div>
             </div>
         </section>
-
-        <footer>
-            <p>&copy; 2024 Apetrecho. Todos os direitos reservados.</p>
-        </footer>
     </div>
+<?php include_once('footer.php'); ?>
 
     <script src="/apetrecho/js/telahome.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
