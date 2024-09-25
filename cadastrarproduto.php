@@ -1,8 +1,13 @@
 <?php 
-session_start(); 
+session_start();
 include_once('header.php'); 
 include_once(__DIR__ . '/php/conexao.php');
 
+if (!isset($_SESSION['bdCodUsuario'])) {
+    // Redireciona ou exibe uma mensagem de erro
+    echo "<script>alert('Usuário não logado.'); window.location.href='login.php';</script>";
+    exit();
+}
 
 $bdCodUsuario = $_SESSION['bdCodUsuario']; // Pegar o ID do usuário logado
 
@@ -15,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imagemProduto = $_FILES['produtoImagem'];
     
     // Definir o caminho onde a imagem será salva
-    $diretorioImagens = 'caminho/para/imagens/';
+    $diretorioImagens = __DIR__ . '/img/';
     $nomeImagem = uniqid() . '_' . basename($imagemProduto['name']); // Nome único para evitar sobrescritas
     $imagemCaminho = $diretorioImagens . $nomeImagem;
     
@@ -40,17 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "<script>alert('Erro na preparação da consulta');</script>";
             }
         } else {
-            echo "<script>alert('Erro ao fazer upload da imagem.');</script>";
+            echo "<script>alert('Erro ao mover o arquivo da imagem.');</script>";
         }
     } else {
         echo "<script>alert('Formato de imagem não permitido ou imagem muito grande.');</script>";
     }
 }
+
 ?>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Cadastrar Produto</h2>
-    <form action="cadastrar_produto.php" method="POST" enctype="multipart/form-data">
+    <form action="cadastrarproduto.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="produtoDescricao" class="form-label">Descrição do Produto</label>
             <textarea class="form-control" id="produtoDescricao" name="produtoDescricao" rows="3" required></textarea>
@@ -63,8 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="produtoImagem" class="form-label">Imagem do Produto</label>
             <input type="file" class="form-control" id="produtoImagem" name="produtoImagem" accept="image/*" required>
         </div>
-        <button type="submit" id="btnCadastrar">Cadastrar Produto</button>
-
+        <button type="submit" id="btnCadastrar" class="btn btn-primary">Cadastrar Produto</button>
     </form>
 </div>
 
