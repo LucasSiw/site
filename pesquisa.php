@@ -27,11 +27,19 @@ if ($result) {
         $produtos[] = $row;
     }
 }
-
-// Exibir resultados
 ?>
+
+<!-- Barra de pesquisa -->
 <div class="container mt-4">
-    <h2>Resultados da Pesquisa para: <?= htmlspecialchars($query); ?></h2>
+    <form action="seu_script_de_pesquisa.php" method="GET" class="d-flex mb-4">
+        <input type="text" name="query" class="form-control me-2" placeholder="Pesquisar produtos" aria-label="Pesquisar">
+        <button type="submit" class="btn btn-outline-success">Pesquisar</button>
+    </form>
+</div>
+
+<!-- Exibir resultados da pesquisa -->
+<div class="container mt-4">
+    <h2 class="welcome-message">Resultados da Pesquisa para: <?= htmlspecialchars($query); ?></h2>
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <?php if (!empty($produtos)): ?>
             <?php foreach ($produtos as $produto): ?>
@@ -49,7 +57,9 @@ if ($result) {
             <?php endforeach; ?>
         <?php else: ?>
             <div class="col">
-                <p>Nenhum produto encontrado.</p>
+                <div class="alert alert-warning" role="alert">
+                    Nenhum produto encontrado.
+                </div>
             </div>
         <?php endif; ?>
     </div>
