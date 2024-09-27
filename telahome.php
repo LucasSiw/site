@@ -21,8 +21,10 @@ if ($result) {
 }
 ?>
 
-<div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+<!-- Carrossel -->
+<div id="carouselExample" class="carousel slide mt-4" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
+        <!-- Imagens do Carrossel -->
         <div class="carousel-item active">
             <img src="/apetrecho/img/Fundo1.png" class="d-block w-100" alt="Fundo 1">
         </div>
@@ -31,6 +33,14 @@ if ($result) {
         </div>
         <div class="carousel-item">
             <img src="/apetrecho/img/Fundo3.png" class="d-block w-100" alt="Fundo 3">
+        </div>
+        
+        <!-- Barra de pesquisa dentro do carrossel -->
+        <div class="search-bar position-absolute top-50 start-50 translate-middle">
+            <form action="seu_script_de_pesquisa.php" method="GET" class="d-flex">
+                <input type="text" name="query" class="form-control me-2" placeholder="Pesquisar produtos" aria-label="Pesquisar" style="width: 400px;">
+                <button type="submit" class="btn btn-outline-success">Pesquisar</button>
+            </form>
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -61,7 +71,6 @@ if ($result) {
         <?php endforeach; ?>
     </div>
 </section>
-</div>
 
 <link rel="stylesheet" href="/apetrecho/css/telahome.css">
 <?php include_once('footer.php'); ?>
@@ -69,5 +78,4 @@ if ($result) {
 <script src="/apetrecho/js/telahome.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
