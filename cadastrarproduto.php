@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h2 class="text-center mb-4">Cadastrar Produto</h2>
     <form action="cadastrarproduto.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="produtoDescricao" class="form-label">Descrição do Produto</label>
+            <label for="produtoDescricao" class="form-label"></label>
             <textarea class="form-control" id="produtoDescricao" name="produtoDescricao" rows="3" required></textarea>
         </div>
         <div class="mb-3">

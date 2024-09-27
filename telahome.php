@@ -37,7 +37,7 @@ if ($result) {
         
         <!-- Barra de pesquisa dentro do carrossel -->
         <div class="search-bar position-absolute top-50 start-50 translate-middle">
-            <form action="seu_script_de_pesquisa.php" method="GET" class="d-flex">
+            <form action="pesquisa.php" method="GET" class="d-flex">
                 <input type="text" name="query" class="form-control me-2" placeholder="Pesquisar produtos" aria-label="Pesquisar" style="width: 400px;">
                 <button type="submit" class="btn btn-outline-success">Pesquisar</button>
             </form>
