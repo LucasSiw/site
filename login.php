@@ -9,22 +9,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $wLogin = htmlspecialchars($_POST['loginEmail']);
         $wSenha = $_POST['loginSenha'];
 
-        // Verifica se o email existe no banco de dados
-        $stmt = $wConexao->prepare("SELECT bdAluNome, bdAluSenha FROM tbUsuario WHERE bdAluEmail = ?");
+        $stmt = $wConexao->prepare("SELECT bdAluNome, bdAluSenha, bdCodUsuario FROM tbUsuario WHERE bdAluEmail = ?");
         if ($stmt) {
             $stmt->bind_param('s', $wLogin);
             $stmt->execute();
             $stmt->store_result();
 
             if ($stmt->num_rows > 0) {
-                $stmt->bind_result($wNome, $hashedPassword);
+                $stmt->bind_result($wNome, $hashedPassword, $bdCodUsuario);
                 $stmt->fetch();
 
-                // Verifica se a senha é válida
                 if (password_verify($wSenha, $hashedPassword)) {
-                    $_SESSION['usuario_nome'] = $wNome; // Salva o nome do usuário na sessão
-                    $_SESSION['bdAluEmail'] = $wLogin; // Salva o email também, caso precise depois
-                    header("Location: telahome.php"); // Redireciona após login bem-sucedido
+                    // Armazena o nome e o código do usuário na sessão
+                    $_SESSION['usuario_nome'] = $wNome; 
+                    $_SESSION['bdAluEmail'] = $wLogin;
+                    $_SESSION['bdCodUsuario'] = $bdCodUsuario; // Adiciona o código do usuário
+
+                    header("Location: telahome.php");
                     exit();
                 } else {
                     $errorMessage = 'Senha incorreta';
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessage = 'Erro na preparação da consulta';
         }
     }
-
-    // Registro
+    
+    // Registro de novo usuário
     if (isset($_POST['edNome'])) {
         $nome = htmlspecialchars($_POST['edNome']);
         $telefone = htmlspecialchars($_POST['edTelefone']);
@@ -47,18 +48,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $senha = $_POST['edSenha'];
         $senhaRep = $_POST['edSenhaRep'];
 
+        // Verifica se as senhas são iguais
         if ($senha !== $senhaRep) {
             $errorMessage = 'As senhas não coincidem';
         } else {
-            $senhaHash = password_hash($senha, PASSWORD_DEFAULT); // Cria o hash da senha
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-            // Prepara para inserir o novo usuário no banco
             $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha) VALUES (?, ?, ?, ?, ?)");
             if ($stmt) {
                 $stmt->bind_param('sssss', $nome, $telefone, $cpf, $email, $senhaHash);
                 if ($stmt->execute()) {
-                    $_SESSION['usuario_nome'] = $nome; // Salva o nome na sessão após o registro
-                    header("Location: telahome.php"); // Redireciona após registro bem-sucedido
+                    $_SESSION['usuario_nome'] = $nome;
+                    $_SESSION['bdAluEmail'] = $email;
+
+                    // Redireciona para a página inicial após registro
+                    header("Location: telahome.php");
                     exit;
                 } else {
                     $errorMessage = 'Erro ao registrar o usuário';
@@ -71,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -128,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <input type="submit" class="btn" value="Registre-se" />
                 </form>
-
             </div>
         </div>
 
@@ -161,5 +163,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
     <?php endif; ?>
 </body>
-
 </html>

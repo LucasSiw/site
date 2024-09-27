@@ -8,20 +8,15 @@ if (!isset($_SESSION['usuario_nome'])) {
 }
 
 $userName = $_SESSION['usuario_nome'];
-
-// Inclua seu arquivo de conexão
 include_once(__DIR__ . '/php/conexao.php');
-
-// Consultar produtos
 $produtos = [];
 $result = $wConexao->query("SELECT bdProdDescricao, bdProdValor, bdProdImagem FROM tbProduto");
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $produtos[] = $row; // Adiciona cada produto ao array
+        $produtos[] = $row;
     }
 }
-
 ?>
 
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
@@ -56,7 +51,6 @@ if ($result) {
                         <img src="<?= htmlspecialchars($produto['bdProdImagem']); ?>" alt="<?= htmlspecialchars($produto['bdProdDescricao']); ?>">
                         <div class="product-info">
                             <h5><?= htmlspecialchars($produto['bdProdDescricao']); ?></h5>
-                            <p>Descrição do produto aqui.</p> 
                             <div class="price">R$ <?= number_format($produto['bdProdValor'], 2, ',', '.'); ?></div>
                         </div>
                     </a>

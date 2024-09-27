@@ -24,7 +24,11 @@
                 </ul>
             </div>
             <div class="nav-button">
-                <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                <?php if (isset($_SESSION['usuario_nome'])): ?>
+                    <span class="welcome-message">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']); ?>!</span>
+                <?php else: ?>
+                    <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                <?php endif; ?>
             </div>
         </nav>
         
