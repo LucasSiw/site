@@ -1,6 +1,7 @@
 <?php
-include_once('header.php');
 session_start();
+
+include_once('header.php');
 
 if (!isset($_SESSION['usuario_nome'])) {
     header("Location: login.php");
@@ -8,6 +9,7 @@ if (!isset($_SESSION['usuario_nome'])) {
 }
 
 $userName = $_SESSION['usuario_nome'];
+
 include_once(__DIR__ . '/php/conexao.php');
 $produtos = [];
 $result = $wConexao->query("SELECT bdProdDescricao, bdProdValor, bdProdImagem FROM tbProduto");
