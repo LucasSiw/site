@@ -1,10 +1,19 @@
 <?php
-include_once(__DIR__ . '/php/conexao.php');
 session_start();
-
+include_once(__DIR__ . '/php/conexao.php');
 $errorMessage = '';
 
+// Incluindo o PHPMailer
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Login
     if (isset($_POST['login'])) {
         $wLogin = htmlspecialchars($_POST['loginEmail']);
         $wSenha = $_POST['loginSenha'];
@@ -23,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Armazena o nome e o código do usuário na sessão
                     $_SESSION['usuario_nome'] = $wNome;
                     $_SESSION['bdAluEmail'] = $wLogin;
-                    $_SESSION['bdCodUsuario'] = $bdCodUsuario; // Adiciona o código do usuário
+                    $_SESSION['bdCodUsuario'] = $bdCodUsuario;
 
                     header("Location: telahome.php");
                     exit();
@@ -53,8 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessage = 'As senhas não coincidem';
         } else {
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-
-            // Gerar um token de verificação único
             $token = bin2hex(random_bytes(50));
 
             $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha, token_verificacao) VALUES (?, ?, ?, ?, ?, ?)");
@@ -62,18 +69,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bind_param('ssssss', $nome, $telefone, $cpf, $email, $senhaHash, $token);
                 if ($stmt->execute()) {
                     // Enviar email de verificação
-                    $url = "http://seusite.com/verificar_email.php?token=$token"; // Ajuste a URL para seu site
-                    $assunto = "Confirme seu cadastro";
-                    $mensagem = "Olá $nome,\nPor favor, clique no link abaixo para verificar seu e-mail e completar seu cadastro:\n$url";
-                    $headers = 'From: seuemail@dominio.com';
+                    $mail = new PHPMailer(true);
+                    try {
+                        // Configurações do servidor
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'apetrechosenai@gmail.com'; // Seu e-mail
+                        $mail->Password = 'Apetrecho@1Sen4i'; // Sua senha do e-mail
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
 
-                    // Função de envio de e-mail
-                    if (mail($email, $assunto, $mensagem, $headers)) {
-                        // Redireciona com uma mensagem para o usuário verificar o e-mail
-                        header("Location: mensagem_verificacao.php");
+                        // Destinatários
+                        $mail->setFrom('apetrechosenai@gmail.com', 'Apetrecho');
+                        $mail->addAddress($email, $nome);
+
+                        // Conteúdo do e-mail
+                        $mail->isHTML(true);
+                        $mail->Subject = "Confirme seu cadastro";
+                        $url = "http://localhost/apetrecho/mensagemverificacao.php?token=$token";
+                        $mail->Body = "Olá $nome,<br>Por favor, clique no link abaixo para verificar seu e-mail e completar seu cadastro:<br><a href='$url'>$url</a>";
+                        $mail->AltBody = "Olá $nome,\nPor favor, clique no link abaixo para verificar seu e-mail e completar seu cadastro:\n$url";
+
+                        $mail->send();
+                        header("Location: mensagemverificacao.php");
                         exit();
-                    } else {
-                        $errorMessage = 'Erro ao enviar o e-mail de verificação';
+                    } catch (Exception $e) {
+                        $errorMessage = 'Erro ao enviar o e-mail de verificação: ' . $mail->ErrorInfo;
                     }
                 } else {
                     $errorMessage = 'Erro ao registrar o usuário';
@@ -119,27 +141,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h2 class="title">Registre-se</h2>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Nome" name="edNome" />
+                        <input type="text" placeholder="Nome" name="edNome" required />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Telefone" name="edTelefone" />
+                        <input type="text" placeholder="Telefone" name="edTelefone" required />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-id-card"></i>
-                        <input type="text" placeholder="CPF" name="edCPF" />
+                        <input type="text" placeholder="CPF" name="edCPF" required />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email" name="edEmail" />
+                        <input type="email" placeholder="Email" name="edEmail" required />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Senha" name="edSenha" />
+                        <input type="password" placeholder="Senha" name="edSenha" required />
                     </div>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Repita senha" name="edSenhaRep" />
+                        <input type="password" placeholder="Repita senha" name="edSenhaRep" required />
                     </div>
                     <input type="submit" class="btn" value="Registre-se" />
                 </form>
@@ -161,19 +183,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h3>Bem Vindo</h3>
                     <p>Registre-se com seus dados pessoais para utilizar todos os recursos do site</p>
                     <button class="btn transparent" id="sign-in-btn">Login</button>
-                    <button class="btn transparent" id="inicio">Ínício</button>
+                    <button class="btn transparent" id="inicio">Ínicio</button>
                 </div>
-                <img src="/apetrecho/img/register.svg" class="image" alt="" />
+                <img src="/apetrecho/img/log.svg" class="image" alt="" />
             </div>
         </div>
     </div>
 
-    <script src="/apetrecho/js/login.js"></script>
-    <?php if (!empty($errorMessage)): ?>
-        <script>
-            alert("<?php echo htmlspecialchars($errorMessage); ?>");
-        </script>
+    <?php if ($errorMessage): ?>
+        <div class="error"><?= $errorMessage ?></div>
     <?php endif; ?>
+
+
+    <script src="/apetrecho/js/login.js"></script>
 </body>
 
 </html>
