@@ -1,5 +1,10 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,6 +14,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="shortcut icon" href="/apetrecho/img/Apetrecho.ico" type="image/x-icon">
 </head>
+
 <body>
     <div class="wrapper">
         <nav class="nav">
@@ -17,10 +23,15 @@
             </div>
             <div class="nav-menu" id="navMenu">
                 <ul>
-                    <li><a href="telahome.php" class="link active">Ínicial</a></li>
-                    <li><a href="carrinho.php" class="link">Carrinho</a></li>
-                    <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="cadastrarproduto.php" class="link">Cadastrar</a></li>
+                    <li><a href="telahome.php"
+                            class="link <?= $current_page == 'telahome.php' ? 'active' : '' ?>">Inicial</a></li>
+                    <li><a href="carrinho.php"
+                            class="link <?= $current_page == 'carrinho.php' ? 'active' : '' ?>">Carrinho</a></li>
+                    <li><a href="#" class="link <?= $current_page == 'servicos.php' ? 'active' : '' ?>">Serviços</a>
+                    </li>
+                    <li><a href="cadastrarproduto.php"
+                            class="link <?= $current_page == 'cadastrarproduto.php' ? 'active' : '' ?>">Cadastrar</a>
+                    </li>
                 </ul>
             </div>
             <div class="nav-button">
@@ -31,7 +42,7 @@
                 <?php endif; ?>
             </div>
         </nav>
-        
+
         <div class="page-title">Seu Carrinho</div>
         <div class="content">
             <section class="produtos">
@@ -74,4 +85,5 @@
 
     <script src="apetrecho/js/carrinho.js"></script>
 </body>
+
 </html>
