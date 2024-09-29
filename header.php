@@ -38,8 +38,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="nav-button">
                 <?php if (isset($_SESSION['usuario_nome'])): ?>
                     <span class="welcome-message">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']); ?>!</span>
+                    <form action="logout.php" method="POST" style="display:inline;">
+                        <button type="submit" class="btn white-btn" id="logoutBtn">Sair</button>
+                    </form>
                 <?php else: ?>
-                    <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                    <button class="btn white-btn" id="loginBtn" onclick="window.location.href='login.php'">Entrar</button>
                 <?php endif; ?>
             </div>
         </nav>

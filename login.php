@@ -2,7 +2,7 @@
 include_once(__DIR__ . '/php/conexao.php');
 session_start();
 
-$errorMessage = ''; 
+$errorMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['login'])) {
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (password_verify($wSenha, $hashedPassword)) {
                     // Armazena o nome e o código do usuário na sessão
-                    $_SESSION['usuario_nome'] = $wNome; 
+                    $_SESSION['usuario_nome'] = $wNome;
                     $_SESSION['bdAluEmail'] = $wLogin;
                     $_SESSION['bdCodUsuario'] = $bdCodUsuario; // Adiciona o código do usuário
 
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessage = 'Erro na preparação da consulta';
         }
     }
-    
+
     // Registro de novo usuário
     if (isset($_POST['edNome'])) {
         $nome = htmlspecialchars($_POST['edNome']);
@@ -54,16 +54,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-            $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha) VALUES (?, ?, ?, ?, ?)");
-            if ($stmt) {
-                $stmt->bind_param('sssss', $nome, $telefone, $cpf, $email, $senhaHash);
-                if ($stmt->execute()) {
-                    $_SESSION['usuario_nome'] = $nome;
-                    $_SESSION['bdAluEmail'] = $email;
+            // Gerar um token de verificação único
+            $token = bin2hex(random_bytes(50));
 
-                    // Redireciona para a página inicial após registro
-                    header("Location: telahome.php");
-                    exit;
+            $stmt = $wConexao->prepare("INSERT INTO tbUsuario (bdAluNome, bdAluTelefone, bdAluCPFCNPJ, bdAluEmail, bdAluSenha, token_verificacao) VALUES (?, ?, ?, ?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param('ssssss', $nome, $telefone, $cpf, $email, $senhaHash, $token);
+                if ($stmt->execute()) {
+                    // Enviar email de verificação
+                    $url = "http://seusite.com/verificar_email.php?token=$token"; // Ajuste a URL para seu site
+                    $assunto = "Confirme seu cadastro";
+                    $mensagem = "Olá $nome,\nPor favor, clique no link abaixo para verificar seu e-mail e completar seu cadastro:\n$url";
+                    $headers = 'From: seuemail@dominio.com';
+
+                    // Função de envio de e-mail
+                    if (mail($email, $assunto, $mensagem, $headers)) {
+                        // Redireciona com uma mensagem para o usuário verificar o e-mail
+                        header("Location: mensagem_verificacao.php");
+                        exit();
+                    } else {
+                        $errorMessage = 'Erro ao enviar o e-mail de verificação';
+                    }
                 } else {
                     $errorMessage = 'Erro ao registrar o usuário';
                 }
@@ -78,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -158,9 +170,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script src="/apetrecho/js/login.js"></script>
     <?php if (!empty($errorMessage)): ?>
-    <script>
-        alert("<?php echo htmlspecialchars($errorMessage); ?>");
-    </script>
+        <script>
+            alert("<?php echo htmlspecialchars($errorMessage); ?>");
+        </script>
     <?php endif; ?>
 </body>
+
 </html>
