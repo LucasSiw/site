@@ -79,9 +79,8 @@ CREATE TABLE IF NOT EXISTS `tbApetrecho`.`tbUsuario` (
 -- -----------------------------------------------------
 -- Table `tbApetrecho`.`tbProduto`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tbApetrecho`.`tbProduto`;
-
 CREATE TABLE IF NOT EXISTS `tbApetrecho`.`tbProduto` (
+
   `bdCodProduto` INT NOT NULL AUTO_INCREMENT,
   `bdProdDescricao` VARCHAR(250) NULL,
   `bdProdValor` DECIMAL(10,2) NULL,
@@ -90,9 +89,10 @@ CREATE TABLE IF NOT EXISTS `tbApetrecho`.`tbProduto` (
   PRIMARY KEY (`bdCodProduto`),
   INDEX `fk_tbProduto_tbUsuario1_idx` (`bdCodUsuario` ASC),
   CONSTRAINT `fk_tbProduto_tbUsuario1`
-    FOREIGN KEY (`bdCodUsuario`)tbapetrecho
+    FOREIGN KEY (`bdCodUsuario`)
     REFERENCES `tbApetrecho`.`tbUsuario` (`bdCodUsuario`)
 ) ENGINE=InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
