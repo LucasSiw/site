@@ -3,38 +3,41 @@ session_start();
 include_once('header.php'); 
 include_once(__DIR__ . '/php/conexao.php');
 
+// Verifica se o usuário está logado
 if (!isset($_SESSION['bdCodUsuario'])) {
-    // Redireciona ou exibe uma mensagem de erro
     echo "<script>alert('Usuário não logado.'); window.location.href='login.php';</script>";
     exit();
 }
 
-$bdCodUsuario = $_SESSION['bdCodUsuario']; // Pegar o ID do usuário logado
+$bdCodUsuario = $_SESSION['bdCodUsuario']; // Certifique-se de que esta variável existe
 
+// Lógica para cadastro de produtos
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Receber dados do formulário
     $descricaoProduto = htmlspecialchars($_POST['produtoDescricao']);
     $valorProduto = htmlspecialchars($_POST['produtoValor']);
     
-    // Processar upload da imagem
     $imagemProduto = $_FILES['produtoImagem'];
     
-    // Definir o caminho onde a imagem será salva
     $diretorioImagens = __DIR__ . '/img/';
-    $nomeImagem = uniqid() . '_' . basename($imagemProduto['name']); // Nome único para evitar sobrescritas
+    $nomeImagem = uniqid() . '_' . basename($imagemProduto['name']); 
     $imagemCaminho = $diretorioImagens . $nomeImagem;
     
-    // Verificar o tipo de arquivo
     $tipoArquivo = strtolower(pathinfo($imagemCaminho, PATHINFO_EXTENSION));
     $tiposPermitidos = ['jpg', 'jpeg', 'png', 'gif'];
 
-    if (in_array($tipoArquivo, $tiposPermitidos) && $imagemProduto['size'] <= 5000000) { // Limite de 5MB
-        // Mover o arquivo para o diretório desejado
+    if (in_array($tipoArquivo, $tiposPermitidos) && $imagemProduto['size'] <= 5000000) { 
         if (move_uploaded_file($imagemProduto['tmp_name'], $imagemCaminho)) {
-            // Inserir no banco de dados
+            // Caminho relativo da imagem
+            $imagemCaminhoRelativo = '/img/' . $nomeImagem;
+            
+            // Monta a URL completa da imagem
+            $urlBase = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+            $urlCompletaImagem = $urlBase . $imagemCaminhoRelativo;
+
+            // Salva no banco de dados a URL completa
             $stmt = $wConexao->prepare("INSERT INTO tbProduto (bdProdDescricao, bdProdValor, bdCodUsuario, bdProdImagem) VALUES (?, ?, ?, ?)");
             if ($stmt) {
-                $stmt->bind_param('sdiss', $descricaoProduto, $valorProduto, $bdCodUsuario, $imagemCaminho);
+                $stmt->bind_param('sdis', $descricaoProduto, $valorProduto, $bdCodUsuario, $urlCompletaImagem);
                 if ($stmt->execute()) {
                     echo "<script>alert('Produto cadastrado com sucesso!');</script>";
                 } else {
@@ -51,14 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<script>alert('Formato de imagem não permitido ou imagem muito grande.');</script>";
     }
 }
-
 ?>
 
-<div class="container mt-5">
+<div class="container mt-5" style="margin-top: 100px;">
     <h2 class="text-center mb-4">Cadastrar Produto</h2>
     <form action="cadastrarproduto.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="produtoDescricao" class="form-label">Descrição do Produto</label>
+            <label for="produtoDescricao" class="form-label"></label>
             <textarea class="form-control" id="produtoDescricao" name="produtoDescricao" rows="3" required></textarea>
         </div>
         <div class="mb-3">

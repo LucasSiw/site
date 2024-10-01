@@ -1,3 +1,7 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -20,17 +24,25 @@
             </div>
             <div class="nav-menu" id="navMenu">
                 <ul>
-                    <li><a href="telahome.php" class="link active">Ínicial</a></li>
-                    <li><a href="carrinho.php" class="link">Carrinho</a></li>
-                    <li><a href="#" class="link">Serviços</a></li>
-                    <li><a href="cadastrarproduto.php" class="link">Cadastrar</a></li>
+                    <li><a href="telahome.php"
+                            class="link <?= $current_page == 'telahome.php' ? 'active' : '' ?>">Inicial</a></li>
+                    <li><a href="carrinho.php"
+                            class="link <?= $current_page == 'carrinho.php' ? 'active' : '' ?>">Carrinho</a></li>
+                    <li><a href="#" class="link <?= $current_page == 'servicos.php' ? 'active' : '' ?>">Serviços</a>
+                    </li>
+                    <li><a href="cadastrarproduto.php"
+                            class="link <?= $current_page == 'cadastrarproduto.php' ? 'active' : '' ?>">Cadastrar</a>
+                    </li>
                 </ul>
             </div>
             <div class="nav-button">
                 <?php if (isset($_SESSION['usuario_nome'])): ?>
                     <span class="welcome-message">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']); ?>!</span>
+                    <form action="logout.php" method="POST" style="display:inline;">
+                        <button type="submit" class="btn white-btn" id="logoutBtn">Sair</button>
+                    </form>
                 <?php else: ?>
-                    <button class="btn white-btn" id="loginBtn" onclick="login()">Entrar</button>
+                    <button class="btn white-btn" id="loginBtn" onclick="window.location.href='login.php'">Entrar</button>
                 <?php endif; ?>
             </div>
         </nav>

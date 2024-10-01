@@ -59,6 +59,18 @@ body {
     border-bottom: 2px solid #fff;
 }
 
+.nav-button {
+    display: flex;
+    flex-direction: column; /* Exibe os elementos na vertical */
+    align-items: center; /* Centraliza os elementos */
+}
+
+.nav-button .welcome-message {
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 10px; /* Adiciona espaçamento entre o nome e o botão */
+}
+
 .nav-button .btn {
     width: 130px;
     height: 40px;
@@ -70,13 +82,13 @@ body {
     transition: .3s ease;
 }
 
-header {
-    color: #fff;
-    font-size: 30px;
-    text-align: center;
-    padding: 10px 0 30px 0;
+.nav-button .btn:hover {
+    background-color: #fb8c00; /* Muda a cor do botão ao passar o mouse */
 }
 
-.welcome-message {
-    color: #ffffff;
+#logoutBtn {
+    width: 130px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 500;
 }
