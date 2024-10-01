@@ -5,6 +5,7 @@ body {
     background-color: #212529; /* Cor de fundo escura */
     color: white; /* Cor padrão do texto */
 }
+
 #btnCadastrar {
     border: none;
     background: #ffb742;

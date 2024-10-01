@@ -41,7 +41,7 @@ if ($result) {
                                 <div class="price">R$ <?= number_format($produto['bdProdValor'], 2, ',', '.'); ?></div>
                                 <?php if ($produto['bdCodUsuario'] == $userIdLogado): ?>
                                     <!-- Se o usuário logado for o dono do produto, exibe o botão de modificar -->
-                                    <a href="modificar_produto.php?id=<?= urlencode($produto['bdCodProduto']); ?>" class="btn btn-warning mt-2">Modificar</a>
+                                    <a href="modificarproduto.php?id=<?= urlencode($produto['bdCodProduto']); ?>" class="btn btn-warning mt-2">Modificar</a>
                                 <?php endif; ?>
                             </div>
                         </a>
