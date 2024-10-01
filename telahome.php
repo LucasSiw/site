@@ -59,7 +59,7 @@ if ($result) {
         <?php foreach ($produtos as $produto): ?>
             <div class="col">
                 <div class="product-card">
-                    <a href="telaproduto.html?id=<?= urlencode($produto['bdProdDescricao']); ?>">
+                    <a href="telaproduto.php?id=<?= urlencode($produto['bdProdDescricao']); ?>">
                         <img src="<?= htmlspecialchars($produto['bdProdImagem']); ?>" alt="<?= htmlspecialchars($produto['bdProdDescricao']); ?>">
                         <div class="product-info">
                             <h5><?= htmlspecialchars($produto['bdProdDescricao']); ?></h5>

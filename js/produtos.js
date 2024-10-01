@@ -1,49 +1,42 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const produtos = {
-        parafusadeira: {
-            name: "Parafusadeira",
-            description: "Parafusadeira elétrica de alta potência.",
-            specs: ["Bateria de 18V", "Velocidade ajustável", "Leve e portátil"],
-            price: "R$ 299,90",
-            image: "/apetrecho/img/parafusadeira.png"
-        },
-
-        luvas: {
-            name: "Luva",
-            description: "Luvas de Segurança",
-            specs: ["Proteção", "Segurança"],
-            price: "R$ 19,99",
-            image: "/apetrecho/img/luva.png"
-        },
-
-        broca: {
-            name: "Broca",
-            description: "Broca para furar metal.",
-            specs: [],
-            price: "R$ 15,90",
-            image: "/apetrecho/img/broca.png"
-        },
-    };
-
+    // Obter o parâmetro 'id' da URL
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
-    if (produtos[productId]) {
-        const product = produtos[productId];
+    // Verifica se o productId existe
+    if (productId) {
+        // Faz uma requisição para o backend para obter os detalhes do produto
+        fetch(`/apetrecho/produto.php?id=${productId}`)
+            .then(response => response.json())
+            .then(product => {
+                if (!product.error) {
+                    // Atualiza os elementos da página com os detalhes do produto
+                    document.getElementById("product-name").textContent = product.name;
+                    document.getElementById("product-description").textContent = product.description;
+                    document.getElementById("product-price").textContent = product.price;
+                    document.getElementById("product-image").src = product.image;
 
-        document.getElementById("product-name").textContent = product.name;
-        document.getElementById("product-description").textContent = product.description;
-        document.getElementById("product-price").textContent = product.price;
-        document.getElementById("product-image").src = product.image;
-
-        const specsList = document.getElementById("product-specs");
-        product.specs.forEach(function(spec) {
-            const li = document.createElement("li");
-            li.textContent = spec;
-            specsList.appendChild(li);
-        });
+                    const specsList = document.getElementById("product-specs");
+                    specsList.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+                    product.specs.split(',').forEach(function(spec) {
+                        const li = document.createElement("li");
+                        li.textContent = spec.trim(); // Trim para remover espaços
+                        specsList.appendChild(li);
+                    });
+                } else {
+                    document.getElementById("product-name").textContent = product.error;
+                    document.getElementById("product-description").textContent = '';
+                    document.getElementById("product-price").textContent = '';
+                    document.getElementById("product-image").src = ''; // Limpa a imagem
+                    document.getElementById("product-specs").innerHTML = ''; // Limpa a lista de especificações
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar produto:', error);
+                document.getElementById("product-name").textContent = "Erro ao carregar produto.";
+            });
     } else {
-        document.getElementById("product-name").textContent = "Produto não encontrado.";
+        document.getElementById("product-name").textContent = "ID do produto não fornecido.";
     }
 });
 
@@ -58,11 +51,12 @@ function adicionarAoCarrinho() {
         imagem: document.getElementById("product-image").src
     };
 
+    // Obtém o carrinho do Local Storage
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
     carrinho.push(produto);
 
+    // Atualiza o Local Storage
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
 
     alert("Produto adicionado ao carrinho!");
 }
-

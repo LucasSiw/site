@@ -55,8 +55,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
-<div class="container mt-5">
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #212529; 
+    color: white; 
+}
+
+#btnCadastrar {
+    border: none;
+    background: #ffb742;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px; 
+    transition: background-color 0.3s, box-shadow 0.3s; 
+    cursor: pointer;
+}
+
+#btnCadastrar:hover {
+    background: #fb8c00;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#produtoDescricao {
+    color: white;
+    background-color: #495057; 
+    border: 1px solid #6c757d; 
+    border-radius: 5px; 
+    padding: 10px; 
+}
+
+textarea,
+input[type="number"],
+input[type="file"] {
+    width: 100%; 
+    border-radius: 5px; 
+    padding: 10px; 
+    border: 1px solid #6c757d; 
+}
+
+textarea:focus,
+input[type="number"]:focus,
+input[type="file"]:focus {
+    outline: none;
+    border-color: #ffb742; 
+}
+
+.custom-margin-top {
+    margin-top: 6rem;
+}
+
+</style>
+
+<div class="container custom-margin-top">
     <h2 class="text-center mb-1">Cadastrar Produto</h2>
     <form action="cadastrarproduto.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
@@ -75,5 +129,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 </div>
 
-<link rel="stylesheet" href="/apetrecho/css/cadastrarprodutos.css">
 <?php include_once('footer.php'); ?>
