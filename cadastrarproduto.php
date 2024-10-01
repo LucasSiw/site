@@ -56,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="container mt-5" style="margin-top: 100px;">
-    <h2 class="text-center mb-4">Cadastrar Produto</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-1">Cadastrar Produto</h2>
     <form action="cadastrarproduto.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="produtoDescricao" class="form-label"></label>
