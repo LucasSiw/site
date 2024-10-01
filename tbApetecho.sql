@@ -96,4 +96,16 @@ CREATE TABLE IF NOT EXISTS `tbApetrecho`.`tbProduto` (
 ALTER TABLE tbUsuario ADD COLUMN email_verificado TINYINT(1) DEFAULT 0;
 ALTER TABLE tbUsuario ADD COLUMN token_verificacao VARCHAR(255);
 
+CREATE TABLE IF NOT EXISTS `tbApetrecho`.'tbCarrinho' (
+    bdCarCodigo INT AUTO_INCREMENT PRIMARY KEY,
+    bdCodUsuario INT NOT NULL,
+    bdCodProduto INT NOT NULL,
+    bdCarQtd INT NOT NULL DEFAULT 1,
+    bdCarPreco DECIMAL(10, 2) NOT NULL,
+    bdCarEstado ENUM('ativo', 'removido') DEFAULT 'ativo',
+    FOREIGN KEY (bdCodUsuario) REFERENCES tbUsuario(bdCodUsuario),
+    FOREIGN KEY (bdCodProduto) REFERENCES tbProduto(bdCodProduto)
+);
+
+
 
