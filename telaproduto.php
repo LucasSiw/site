@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     
     // Insira o produto no carrinho
     $stmt = $wConexao->prepare("INSERT INTO tbCarrinho (bdCodUsuario, bdCodProduto, bdCarQtd, bdCarPreco) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiid", $_SESSION['usuario_id'], $productId, $quantity, $productPrice);
+    $stmt->bind_param("iiid", $_SESSION['bdCodUsuario'], $productId, $quantity, $productPrice);
     $stmt->execute();
     $stmt->close();
 
@@ -42,9 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
 
 <style>
 .custom-margin-top {
-    margin-top: 7em; 
+    margin-top: 10rem; 
 }
-
 </style>
 <div class="container custom-margin-top">
     <div class="row">

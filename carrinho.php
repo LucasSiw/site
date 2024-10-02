@@ -1,5 +1,44 @@
 <?php
-$current_page = basename($_SERVER['PHP_SELF']);
+session_start();
+include_once(__DIR__ . '/php/conexao.php'); // Conexão com o banco de dados
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['usuario_nome'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Inicializa o carrinho
+$carrinho = [];
+$total = 0;
+
+// Obtém os itens do carrinho do banco de dados
+if (isset($_SESSION['bdCodUsuario'])) {
+    $usuarioId = $_SESSION['bdCodUsuario'];
+    $result = $wConexao->query("SELECT p.bdCodProduto, p.bdProdDescricao, p.bdProdValor, c.bdCarQtd FROM tbCarrinho c JOIN tbProduto p ON c.bdCodProduto = p.bdCodProduto WHERE c.bdCodUsuario = $usuarioId");
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $carrinho[] = $row;
+            // Calcula o total
+            $total += $row['bdProdValor'] * $row['bdCarQtd'];
+        }
+    }
+}
+
+// Função para remover produto do carrinho
+if (isset($_GET['remove'])) {
+    $removeId = (int)$_GET['remove'];
+    $stmt = $wConexao->prepare("DELETE FROM tbCarrinho WHERE bdCodUsuario = ? AND bdCodProduto = ?");
+    $stmt->bind_param("ii", $_SESSION['bdCodUsuario'], $removeId);
+    $stmt->execute();
+    $stmt->close();
+
+    // Redireciona para a mesma página para atualizar o carrinho
+    header("Location: carrinho.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -23,15 +62,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             <div class="nav-menu" id="navMenu">
                 <ul>
-                    <li><a href="telahome.php"
-                            class="link <?= $current_page == 'telahome.php' ? 'active' : '' ?>">Inicial</a></li>
-                    <li><a href="carrinho.php"
-                            class="link <?= $current_page == 'carrinho.php' ? 'active' : '' ?>">Carrinho</a></li>
-                    <li><a href="#" class="link <?= $current_page == 'servicos.php' ? 'active' : '' ?>">Serviços</a>
-                    </li>
-                    <li><a href="cadastrarproduto.php"
-                            class="link <?= $current_page == 'cadastrarproduto.php' ? 'active' : '' ?>">Cadastrar</a>
-                    </li>
+                    <li><a href="telahome.php" class="link <?= $current_page == 'telahome.php' ? 'active' : '' ?>">Inicial</a></li>
+                    <li><a href="carrinho.php" class="link <?= $current_page == 'carrinho.php' ? 'active' : '' ?>">Carrinho</a></li>
+                    <li><a href="#" class="link <?= $current_page == 'servicos.php' ? 'active' : '' ?>">Serviços</a></li>
+                    <li><a href="cadastrarproduto.php" class="link <?= $current_page == 'cadastrarproduto.php' ? 'active' : '' ?>">Cadastrar</a></li>
                 </ul>
             </div>
             <div class="nav-button">
@@ -57,6 +91,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </tr>
                     </thead>
                     <tbody id="carrinho-itens">
+                        <?php if (!empty($carrinho)): ?>
+                            <?php foreach ($carrinho as $item): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($item['bdProdDescricao']); ?></td>
+                                    <td>R$ <?= number_format($item['bdProdValor'], 2, ',', '.'); ?></td>
+                                    <td><?= htmlspecialchars($item['bdCarQtd']); ?></td>
+                                    <td>R$ <?= number_format($item['bdProdValor'] * $item['bdCarQtd'], 2, ',', '.'); ?></td>
+                                    <td>
+                                        <a href="?remove=<?= htmlspecialchars($item['bdCodProduto']); ?>" class="btn btn-danger">Remover</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="5">Seu carrinho está vazio.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>
@@ -64,7 +115,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <div class="box">
                     <header>Resumo da compra</header>
                     <div class="info">
-                        <div><span>Sub-total</span><span id="sub-total">R$ 0</span></div>
+                        <div><span>Sub-total</span><span id="sub-total">R$ <?= number_format($total, 2, ',', '.'); ?></span></div>
                         <div><span>Frete</span><span>Gratuito</span></div>
                         <div>
                             <button>
@@ -75,15 +126,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                     <footer>
                         <span>Total</span>
-                        <span id="total">R$ 0</span>
+                        <span id="total">R$ <?= number_format($total, 2, ',', '.'); ?></span>
                     </footer>
                 </div>
-                <button onclick="finalizarCompra()">Finalizar Compra</button>
+                <button>Finalizar Compra</button>
             </aside>
         </div>
     </div>
 
-    <script src="apetrecho/js/carrinho.js"></script>
 </body>
 
 </html>
