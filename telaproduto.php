@@ -35,14 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $stmt->bind_param("iiid", $_SESSION['bdCodUsuario'], $productId, $quantity, $productPrice);
     $stmt->execute();
     $stmt->close();
-
-    echo "<script>alert('Produto adicionado ao carrinho!');</script>";
 }
 ?>
 
 <style>
 .custom-margin-top {
     margin-top: 10rem; 
+}
+
+.btn{
+  background: #ffb742;
+  color: #fff;
+  border: none;
+  
 }
 </style>
 <div class="container custom-margin-top">

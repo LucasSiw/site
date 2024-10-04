@@ -224,6 +224,11 @@ table tbody tr td {
 .texto {
   color: #fff;
 }
+
+.carrinho-itens{
+  color: #fff;
+}
+
 </style>
 
         <div class="page-title">Seu Carrinho</div>
@@ -239,7 +244,7 @@ table tbody tr td {
                             <th>-</th>
                         </tr>
                     </thead>
-                    <tbody id="carrinho-itens">
+                    <tbody id="carrinho-itens" class="carrinho-itens">
                         <?php if (!empty($carrinho)): ?>
                             <?php foreach ($carrinho as $item): ?>
                                 <tr>
