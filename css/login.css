@@ -415,3 +415,7 @@ form.sign-in-form {
 .home-btn:hover {
   background-color: #fb8c00;
 }
+
+.error-message {
+  color: #fff;
+}

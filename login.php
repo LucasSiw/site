@@ -37,14 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     header("Location: telahome.php");
                     exit();
                 } else {
-                    $errorMessage = 'Senha incorreta';
+                    $errorMessage = 'Senha incorreta.';
                 }
             } else {
-                $errorMessage = 'Email não encontrado';
+                $errorMessage = 'Email não encontrado.';
             }
             $stmt->close();
         } else {
-            $errorMessage = 'Erro na preparação da consulta';
+            $errorMessage = 'Erro na preparação da consulta.';
         }
     }
 
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verifica se as senhas são iguais
         if ($senha !== $senhaRep) {
-            $errorMessage = 'As senhas não coincidem';
+            $errorMessage = 'As senhas não coincidem.';
         } else {
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
             $token = bin2hex(random_bytes(50));
@@ -98,11 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $errorMessage = 'Erro ao enviar o e-mail de verificação: ' . $mail->ErrorInfo;
                     }
                 } else {
-                    $errorMessage = 'Erro ao registrar o usuário';
+                    $errorMessage = 'Erro ao registrar o usuário.';
                 }
                 $stmt->close();
             } else {
-                $errorMessage = 'Erro na preparação da consulta de inserção';
+                $errorMessage = 'Erro na preparação da consulta de inserção.';
             }
         }
     }
@@ -116,8 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/apetrecho/css/login.css" />
     <link rel="shortcut icon" href="/apetrecho/img/Apetrecho.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/apetrecho/css/login.css"/>
     <title>Apetrecho</title>
 </head>
 
@@ -127,6 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="signin-signup">
                 <form action="login.php" method="POST" class="sign-in-form">
                     <h2 class="title">Login</h2>
+                    <div class="error-message">
+                        <?php if (!empty($errorMessage)): ?>
+                        <?= htmlspecialchars($errorMessage) ?>
+                        <?php endif; ?>
+                    </div>
+
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" name="loginEmail" placeholder="Login" required />
@@ -139,6 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
                 <form action="login.php" method="POST" class="sign-up-form">
                     <h2 class="title">Registre-se</h2>
+                    <div class="error-message">
+                        <?php if (!empty($errorMessage)): ?>
+                        <?= htmlspecialchars($errorMessage) ?>
+                        <?php endif; ?>
+                    </div>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" placeholder="Nome" name="edNome" required />
@@ -165,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <input type="submit" class="btn" value="Registre-se" />
                 </form>
+
             </div>
         </div>
 
@@ -189,11 +201,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
-
-    <?php if ($errorMessage): ?>
-        <div class="error"><?= $errorMessage ?></div>
-    <?php endif; ?>
-
 
     <script src="/apetrecho/js/login.js"></script>
 </body>

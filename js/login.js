@@ -159,3 +159,14 @@ document.querySelector('.sign-up-form').addEventListener('submit', function(even
         alert('Número de telefone inválido. Por favor, insira um número de telefone válido.');
     }
 });
+
+function showErrorMessage(message) {
+    const errorMessage = document.getElementById("error-message");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+    
+    setTimeout(() => {
+      errorMessage.style.display = "none";
+    }, 5000);
+  }
+  
