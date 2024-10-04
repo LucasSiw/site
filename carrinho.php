@@ -29,16 +29,28 @@ if (isset($_SESSION['bdCodUsuario'])) {
 
 // Função para remover produto do carrinho
 if (isset($_GET['remove'])) {
-    $removeId = (int)$_GET['remove'];
-    $stmt = $wConexao->prepare("DELETE FROM tbCarrinho WHERE bdCodUsuario = ? AND bdCodProduto = ?");
-    $stmt->bind_param("ii", $_SESSION['bdCodUsuario'], $removeId);
-    $stmt->execute();
-    $stmt->close();
+  $removeId = (int)$_GET['remove']; // Captura o ID do produto a ser removido
+  $usuarioId = $_SESSION['bdCodUsuario']; // Captura o ID do usuário atual
 
-    // Redireciona para a mesma página para atualizar o carrinho
-    header("Location: carrinho.php");
-    exit();
+  // Prepara a consulta para remover apenas o produto específico do carrinho do usuário
+  $stmt = $wConexao->prepare("DELETE FROM tbCarrinho WHERE bdCodUsuario = ? AND bdCodProduto = ?");
+  $stmt->bind_param("ii", $usuarioId, $removeId); // Bind dos parâmetros
+  $stmt->execute();
+  
+  // Verifica se a remoção foi bem-sucedida
+  if ($stmt->affected_rows > 0) {
+      echo "Produto removido com sucesso.";
+  } else {
+      echo "Erro ao remover o produto ou o produto não existe no carrinho.";
+  }
+
+  $stmt->close();
+
+  // Redireciona para a mesma página para atualizar o carrinho
+  header("Location: carrinho.php");
+  exit();
 }
+
 
 ?>
 <style>
