@@ -34,15 +34,10 @@ if ($result) {
                 <div class="col">
                     <div class="product-card">
                         <a href="telaproduto.php?id=<?= urlencode($produto['bdCodProduto']); ?>">
-                            <!-- Certifique-se de que o caminho da imagem está correto -->
                             <img src="<?= htmlspecialchars($produto['bdProdImagem']); ?>" alt="<?= htmlspecialchars($produto['bdProdDescricao']); ?>" class="img-fluid">
                             <div class="product-info">
                                 <h5><?= htmlspecialchars($produto['bdProdDescricao']); ?></h5>
                                 <div class="price">R$ <?= number_format($produto['bdProdValor'], 2, ',', '.'); ?></div>
-                                <?php if ($produto['bdCodUsuario'] == $userIdLogado): ?>
-                                    <!-- Se o usuário logado for o dono do produto, exibe o botão de modificar -->
-                                    <a href="modificarproduto.php?id=<?= urlencode($produto['bdCodProduto']); ?>" class="btn btn-warning mt-2">Modificar</a>
-                                <?php endif; ?>
                             </div>
                         </a>
                     </div>
