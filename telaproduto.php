@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $stmt->close();
 }
 
-// Função para excluir o produto
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     $productIdToDelete = (int)$_POST['product_id'];
     
@@ -43,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     $deleteStmt->bind_param("ii", $productIdToDelete, $userIdLogado);
     $deleteStmt->execute();
     $deleteStmt->close();
-    header("Location: " . $_SERVER['PHP_SELF']); // Redireciona para a mesma página para atualizar a lista de produtos
+    header("Location: telahome.php");
     exit();
 }
 ?>
