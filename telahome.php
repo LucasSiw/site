@@ -72,10 +72,10 @@ if ($result) {
     </div>
 </section>
 
-<link rel="stylesheet" href="/apetrecho/css/telahome.css">
+<link rel="stylesheet" href="/apetrecho/css/index.css">
 <?php include_once('footer.php'); ?>
 
-<script src="/apetrecho/js/telahome.js"></script>
+<script src="/apetrecho/js/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

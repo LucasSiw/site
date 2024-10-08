@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     $deleteStmt->bind_param("ii", $productIdToDelete, $userIdLogado);
     $deleteStmt->execute();
     $deleteStmt->close();
-    header("Location: telahome.php");
+    header("Location: index.php");
     exit();
 }
 ?>

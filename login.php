@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['bdAluEmail'] = $wLogin;
                     $_SESSION['bdCodUsuario'] = $bdCodUsuario;
 
-                    header("Location: telahome.php");
+                    header("Location: index.php");
                     exit();
                 } else {
                     $errorMessage = 'Senha incorreta.';

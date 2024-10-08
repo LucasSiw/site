@@ -24,8 +24,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             <div class="nav-menu" id="navMenu">
                 <ul>
-                    <li><a href="telahome.php"
-                            class="link <?= $current_page == 'telahome.php' ? 'active' : '' ?>">Inicial</a></li>
+                    <li><a href="index.php"
+                            class="link <?= $current_page == 'index.php' ? 'active' : '' ?>">Inicial</a></li>
                     <li><a href="carrinho.php"
                             class="link <?= $current_page == 'carrinho.php' ? 'active' : '' ?>">Carrinho</a></li>
                     <li><a href="#" class="link <?= $current_page == 'servicos.php' ? 'active' : '' ?>">Serviços</a>

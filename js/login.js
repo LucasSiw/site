@@ -12,7 +12,7 @@ sign_in_btn.addEventListener("click", () => {
 });
 
 inicio_btn.addEventListener("click", () => {
-  window.location.href = 'telahome.html';
+  window.location.href = 'index.html';
 });
 
 
